@@ -7,6 +7,8 @@ import type { PoolChat as PoolChatRow } from '@/types/database';
 export function usePoolChat(poolId: string, currentUser: User | null) {
   const [messages, setMessages] = useState<PoolChatRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [unreadCount, setUnreadCount] = useState(0);
   const supabase = createClient();
 
   useEffect(() => {
@@ -85,5 +87,5 @@ export function usePoolChat(poolId: string, currentUser: User | null) {
     }
   };
 
-  return { messages, loading, sendMessage };
+  return { messages, loading, error, unreadCount, sendMessage };
 }
