@@ -1,16 +1,16 @@
 'use client';
 
-import { useState, memo } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { MapPin, Clock, Users, AlertCircle } from 'lucide-react';
-import type { Pool } from '@/types/database';
-import { formatDistance } from '@/lib/location';
 import { formatDistanceToNow } from 'date-fns';
+import { MapPin, Clock, Users } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState, memo } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { formatDistance } from '@/lib/location';
+
+import type { Pool } from '@/types/database';
+
 
 interface PoolProgressCardProps {
     pool: Pool;
