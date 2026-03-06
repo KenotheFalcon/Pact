@@ -1,0 +1,232 @@
+// Service Worker for Pact Marketplace
+// Caching strategy: Network-first for API, cache-first for static assets
+
+const CACHE_VERSION = 'v1';
+const STATIC_CACHE = `pact-static-${CACHE_VERSION}`;
+const API_CACHE = `pact-api-${CACHE_VERSION}`;
+const IMAGE_CACHE = `pact-images-${CACHE_VERSION}`;
+
+// Static assets to cache on install
+const STATIC_ASSETS = [
+    '/',
+    '/manifest.webmanifest',
+    '/offline.html',
+];
+
+// Install event - cache static assets
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(STATIC_CACHE).then((cache) => {
+            return cache.addAll(STATIC_ASSETS).catch(() => {
+                // Ignore failures; not all assets may be available
+                console.log('Some static assets could not be cached');
+            });
+        }).then(() => self.skipWaiting()),
+    );
+});
+
+// Activate event - cleanup old caches
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
+                    if (
+                        cacheName !== STATIC_CACHE &&
+                        cacheName !== API_CACHE &&
+                        cacheName !== IMAGE_CACHE &&
+                        cacheName.startsWith('pact-')
+                    ) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        }).then(() => self.clients.claim()),
+    );
+});
+
+// Fetch event - implement caching strategies
+self.addEventListener('fetch', (event) => {
+    const request = event.request;
+    const url = new URL(request.url);
+
+    // Skip cross-origin requests
+    if (url.origin !== self.location.origin) {
+        return;
+    }
+
+    // Only handle GET requests
+    if (request.method !== 'GET') {
+        return;
+    }
+
+    // Strategy 1: Cache-first for images
+    if (url.pathname.match(/\.(png|jpg|jpeg|gif|webp|svg)$/i)) {
+        event.respondWith(
+            caches.open(IMAGE_CACHE).then((cache) => {
+                return cache.match(request).then((response) => {
+                    if (response) {
+                        return response;
+                    }
+                    return fetch(request).then((response) => {
+                        // Only cache successful responses
+                        if (response && response.status === 200) {
+                            cache.put(request, response.clone());
+                        }
+                        return response;
+                    }).catch(() => {
+                        // Return a placeholder or fallback
+                        return new Response('Image not available offline', {
+                            status: 503,
+                            statusText: 'Service Unavailable',
+                        });
+                    });
+                });
+            })
+        );
+        return;
+    }
+
+    // Strategy 2: Cache-first for static assets (JS, CSS, fonts)
+    if (
+        url.pathname.match(/\.(js|css|woff|woff2|ttf|eot)$/i) ||
+        url.pathname.startsWith('/_next/')
+    ) {
+        event.respondWith(
+            caches.open(STATIC_CACHE).then((cache) => {
+                return cache.match(request).then((response) => {
+                    if (response) {
+                        return response;
+                    }
+                    return fetch(request).then((response) => {
+                        // Clone before checking status to avoid "body already used" error
+                        const responseClone = response.clone();
+                        if (response && response.status === 200) {
+                            cache.put(request, responseClone);
+                        }
+                        return response;
+                    });
+                });
+            })
+        );
+        return;
+    }
+
+    // Strategy 3: Network-first for API and HTML
+    event.respondWith(
+        fetch(request)
+            .then((response) => {
+                // Clone response before any checks to avoid "body already used" error
+                const responseClone = response.clone();
+                
+                // Only cache successful responses
+                if (response && response.status === 200) {
+                    const cacheName = url.pathname.startsWith('/api/') ? API_CACHE : STATIC_CACHE;
+                    caches.open(cacheName).then((cache) => {
+                        cache.put(request, responseClone);
+                    });
+                }
+                return response;
+            })
+            .catch(() => {
+                // Return cached response or offline page
+                return caches.match(request).then((response) => {
+                    return (
+                        response ||
+                        caches.match('/offline.html') ||
+                        new Response('Offline - content not available', {
+                            status: 503,
+                            statusText: 'Service Unavailable',
+                        })
+                    );
+                });
+            })
+    );
+});
+
+// Background sync for offline actions
+self.addEventListener('sync', (event) => {
+    if (event.tag === 'sync-pending-pledges') {
+        event.waitUntil(syncPendingPledges());
+    }
+});
+
+async function syncPendingPledges() {
+    try {
+        // This would sync any pending pool join pledges made offline
+        // Implementation depends on local storage mechanism
+        const db = await openDB();
+        const pendingPledges = await db.getAll('pending-pledges');
+
+        for (const pledge of pendingPledges) {
+            try {
+                await fetch('/api/pools/join', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(pledge),
+                });
+                // Remove from pending on success
+                await db.delete('pending-pledges', pledge.id);
+            } catch (error) {
+                console.error('Failed to sync pledge:', error);
+            }
+        }
+    } catch (error) {
+        console.error('Background sync error:', error);
+    }
+}
+
+// Push notifications
+self.addEventListener('push', (event) => {
+    if (!event.data) return;
+
+    const data = event.data.json();
+    const options = {
+        body: data.body || '',
+        icon: '/images/icon-192.png',
+        badge: '/images/icon-192.png',
+        tag: data.tag || 'notification',
+        data: data.data || {},
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(data.title || 'Pact Marketplace', options)
+    );
+});
+
+// Handle notification clicks
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+
+    const urlToOpen = event.notification.data?.url || '/';
+
+    event.waitUntil(
+        clients.matchAll({ type: 'window' }).then((clientList) => {
+            // Check if window is already open
+            for (const client of clientList) {
+                if (client.url === urlToOpen && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+            // Open new window if not found
+            if (clients.openWindow) {
+                return clients.openWindow(urlToOpen);
+            }
+        })
+    );
+});
+
+// Helper to open indexed DB for offline storage
+function openDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open('PactDB', 1);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => resolve(request.result);
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains('pending-pledges')) {
+                db.createObjectStore('pending-pledges', { keyPath: 'id' });
+            }
+        };
+    });
+}

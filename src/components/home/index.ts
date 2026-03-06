@@ -1,0 +1,6 @@
+export { HeroSection } from './HeroSection'
+export { StatsSection } from './StatsSection'
+export { FeaturesSection } from './FeaturesSection'
+export { ActivePoolsSection } from './ActivePoolsSection'
+export { FarmersSection } from './FarmersSection'
+export { TrustSection } from './TrustSection'
