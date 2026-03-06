@@ -1,11 +1,12 @@
-import { createClient } from "@/lib/supabase/server"
-import { Pool } from "@/types/database"
 import {
   EARTH_RADIUS_KM,
-  MS_PER_DAY,
   DEFAULT_SEARCH_RADIUS_KM,
   POOL_STATUS,
 } from "@/lib/constants"
+import { createClient } from "@/lib/supabase/server"
+import { Pool } from "@/types/database"
+
+const MS_PER_DAY = 24 * 60 * 60 * 1000
 
 export class RecommendationService {
   /**
