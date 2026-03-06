@@ -1,13 +1,27 @@
-import { createClient } from "@/lib/supabase/server"
-import { Pool } from "@/types/database"
+import { SupabaseClient } from '@supabase/supabase-js'
+
 import {
   EARTH_RADIUS_KM,
   MS_PER_DAY,
   DEFAULT_SEARCH_RADIUS_KM,
   POOL_STATUS,
 } from "@/lib/constants"
+import { createClient } from "@/lib/supabase/server"
+import { Pool } from "@/types/database"
 
 export class RecommendationService {
+  constructor(private readonly supabase: SupabaseClient) {}
+
+  async getRecommendations(_userId: string) {
+    if (!this.supabase) {
+      throw new Error("Supabase client not initialized")
+    }
+
+    // In a real implementation this would fetch recommendations for a specific user
+    // Return empty array as default state
+    return [];
+  }
+
   /**
    * Get recommended pools based on user location
    * Uses PostGIS via Supabase RPC 'get_nearby_pools'
