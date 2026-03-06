@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+
 import { refreshSession, getUserWithRole } from "@/lib/supabase/middleware";
 
 /**
@@ -14,7 +15,6 @@ import { refreshSession, getUserWithRole } from "@/lib/supabase/middleware";
 // ===== RATE LIMITING =====
 const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
 const RATE_LIMIT_MAX = 60; // max 60 requests per window
-const MAX_RATE_LIMIT_ENTRIES = 10_000; // Prevent unbounded memory growth
 const CLEANUP_THRESHOLD = 8_000; // Cleanup when reaching this many entries
 
 type Counter = { count: number; resetAt: number };
