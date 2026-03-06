@@ -1,24 +1,19 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import {
-  ApiResponse,
-  NotFoundError,
-  AuthorizationError,
-  ValidationError,
-  formatError,
-  logError,
-  handleSupabaseError,
-} from "@/lib/utils/error-handling";
+
 import {
   notifyPoolLocked,
   notifyPoolCancelled,
 } from "@/lib/notifications/helpers";
-import type { ListingRow } from "@/types/supabase";
+import { createClient } from "@/lib/supabase/server";
+import {
+  formatError,
+  logError,
+  handleSupabaseError,
+} from "@/lib/utils/error-handling";
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const CRON_SECRET = process.env.CRON_SECRET!;
+import type { ListingRow } from "@/types/supabase";
 
 /**
  * Captures all authorized payments when a pool locks
@@ -150,19 +145,17 @@ export async function checkAndLockPools() {
       return { success: true, poolsLocked: 0 };
     }
 
-    let lockedCount = 0;
-    const results = [];
-
-    // Process each pool
-    for (const pool of eligiblePools) {
+    // Process each pool concurrently
+    const capturePromises = eligiblePools.map(async (pool) => {
       // The database trigger should handle the status update to 'locked'
       // We just need to trigger the payment capture
       const result = await capturePoolPayments(pool.id);
-      results.push({ poolId: pool.id, result });
-      if (result.success) {
-        lockedCount++;
-      }
-    }
+      return { poolId: pool.id, result };
+    });
+
+    const results = await Promise.all(capturePromises);
+
+    const lockedCount = results.filter((r) => r.result.success).length;
 
     return {
       success: true,
