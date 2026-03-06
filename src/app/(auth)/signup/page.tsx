@@ -1,19 +1,25 @@
 'use client'
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { PasswordInputWithStrength } from "@/components/ui/password-input-with-strength"
-import { SecurityNotice } from "@/components/auth/SecurityNotice"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { signup } from "../actions"
-import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton"
 import { ArrowRight, Loader2, HelpCircle } from "lucide-react"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { MotionWrapper } from "@/components/MotionWrapper"
-import { Suspense, useEffect, useRef, useState } from "react"
+import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import type { PasswordStrengthResult } from "@/lib/password-validation"
+import { Suspense, useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
+
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton"
+import { SecurityNotice } from "@/components/auth/SecurityNotice"
+import { MotionWrapper } from "@/components/MotionWrapper"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { LoadingButton } from "@/components/ui/loading-button"
+import { PasswordInputWithStrength } from "@/components/ui/password-input-with-strength"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+
+import { signup } from "../actions"
+
+
+
+import type { PasswordStrengthResult } from "@/lib/password-validation"
+
 
 function SignupContent() {
     const searchParams = useSearchParams()
@@ -29,7 +35,7 @@ function SignupContent() {
         if (roleFromQuery === 'farmer' || roleFromQuery === 'buyer') {
             setRole(roleFromQuery)
         }
-        
+
         const errorFromQuery = searchParams.get('error')
         if (errorFromQuery && errorFromQuery !== lastErrorRef.current) {
             lastErrorRef.current = errorFromQuery
@@ -167,13 +173,15 @@ function SignupContent() {
                                     }
                                 </p>
                             </div>
-<Button 
+<LoadingButton
                                 type="submit" 
                                 disabled={isSubmitting || (passwordStrength !== null && passwordStrength.label === 'weak')}
+                                loading={isSubmitting}
+                                loadingText="Creating Account..."
                                 className="w-full bg-pact-green hover:bg-pact-green/90 text-white shadow-lg shadow-pact-green/20 h-12 rounded-xl text-base font-semibold mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {isSubmitting ? 'Creating Account...' : 'Sign Up'} <ArrowRight className="ml-2 h-4 w-4" />
-                            </Button>
+                                Sign Up <ArrowRight className="ml-2 h-4 w-4" />
+                            </LoadingButton>
                         </form>
 
                         <div className="relative my-8">

@@ -1,13 +1,16 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { PasswordInput } from "@/components/ui/password-input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, ArrowRight } from "lucide-react"
-import { login } from "../actions"
+import Link from "next/link"
+
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton"
 import { MotionWrapper } from "@/components/MotionWrapper"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
+import { SubmitButton } from "@/components/ui/submit-button"
+
+import { login } from "../actions"
+
 
 export default function LoginPage({
   searchParams,
@@ -72,9 +75,12 @@ export default function LoginPage({
                   className="bg-background/50 border-input focus:ring-pact-green focus:border-pact-green h-12 rounded-xl"
                 />
               </div>
-              <Button type="submit" className="w-full bg-pact-green hover:bg-pact-green/90 text-white shadow-lg shadow-pact-green/20 h-12 rounded-xl text-base font-semibold">
+              <SubmitButton
+                loadingText="Signing In..."
+                className="w-full bg-pact-green hover:bg-pact-green/90 text-white shadow-lg shadow-pact-green/20 h-12 rounded-xl text-base font-semibold"
+              >
                 Sign In <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+              </SubmitButton>
             </form>
 
             <div className="relative my-8">

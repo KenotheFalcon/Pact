@@ -1,0 +1,3 @@
+## 2024-03-06 - Next.js Server Actions require manual pending states
+**Learning:** By default, Next.js server actions do not provide any visual loading feedback or disable submit buttons during their execution. This can cause double-submissions and leaves users wondering if an action occurred, especially over slow network connections. The `useFormStatus` hook from `react-dom` is critical for gracefully capturing this `pending` state for UX and Accessibility (e.g., setting `aria-disabled`).
+**Action:** When implementing new forms utilizing server actions, always introduce a client-side wrapper around the submit button (like `<SubmitButton>`) that utilizes `useFormStatus()` to automatically inject loading spinners, `disabled`, and `aria-disabled` attributes.

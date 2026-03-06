@@ -1,15 +1,19 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from "next/link"
-import { PasswordInputWithStrength } from "@/components/ui/password-input-with-strength"
-import { LoadingButton } from "@/components/ui/loading-button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, CheckCircle2, ArrowLeft } from "lucide-react"
 import { createBrowserClient } from '@supabase/ssr'
+import { AlertCircle, CheckCircle2, ArrowLeft } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+
 import { MotionWrapper } from "@/components/MotionWrapper"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { LoadingButton } from "@/components/ui/loading-button"
+import { PasswordInputWithStrength } from "@/components/ui/password-input-with-strength"
+
+
+
 import type { PasswordStrengthResult } from "@/lib/password-validation"
 
 export default function ResetPasswordPage() {
