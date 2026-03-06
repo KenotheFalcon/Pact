@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react';
+
 import { createClient } from '@/lib/supabase/client';
+
+import type { PoolChat as PoolChatRow } from '@/types/database';
 import type { User } from '@supabase/supabase-js';
 import type { RealtimePostgresInsertPayload } from '@supabase/supabase-js';
-import type { PoolChat as PoolChatRow } from '@/types/database';
 
 export function usePoolChat(poolId: string, currentUser: User | null) {
   const [messages, setMessages] = useState<PoolChatRow[]>([]);
   const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [error, setError] = useState<Error | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [unreadCount, setUnreadCount] = useState(0);
   const supabase = createClient();
 
   useEffect(() => {
@@ -85,5 +91,5 @@ export function usePoolChat(poolId: string, currentUser: User | null) {
     }
   };
 
-  return { messages, loading, sendMessage };
+  return { messages, loading, error, unreadCount, sendMessage };
 }
