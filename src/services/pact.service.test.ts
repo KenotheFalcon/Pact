@@ -62,7 +62,7 @@ describe('PactService', () => {
     mockSupabase.from.mockReturnValue({ select: mockSelect, insert: mockInsert })
     mockSelect.mockReturnValue({ eq: mockEq, order: mockOrder, single: mockSingle })
     mockInsert.mockReturnValue({ select: mockSelect })
-    mockEq.mockReturnValue({ single: mockSingle, eq: mockEq })
+    mockEq.mockReturnValue({ single: mockSingle, eq: mockEq, limit: mockLimit, order: mockOrder })
     mockSingle.mockResolvedValue({ data: { id: 'test-id' }, error: null })
   })
 
@@ -94,6 +94,20 @@ describe('PactService', () => {
         minQuantity: 10,
         expiresAt: '2024-12-31',
       })).rejects.toThrow('Listing not found')
+    })
+
+    it('should throw error if pool creation fails', async () => {
+      // Mock listing check success
+      mockSingle.mockResolvedValueOnce({ data: { quantity: 100, price_per_unit: 10 }, error: null })
+      // Mock pool creation failure
+      mockSingle.mockResolvedValueOnce({ data: null, error: { message: 'Database error' } })
+
+      await expect(PactService.createPool({
+        listingId: 'listing-123',
+        leaderId: 'user-123',
+        minQuantity: 10,
+        expiresAt: '2024-12-31',
+      })).rejects.toThrow('Database error')
     })
   })
 
@@ -133,6 +147,176 @@ describe('PactService', () => {
         'PACT-TEST-REF-123'
       )
       expect(result).toEqual(mockPaymentResponse)
+    })
+
+    it('should throw error if pool data retrieval fails', async () => {
+      mockSingle.mockResolvedValueOnce({ data: null, error: { message: 'Not found' } })
+
+      await expect(PactService.joinPool('pool-123', 'user-123', 5, 'test@test.com'))
+        .rejects.toThrow('Pool data retrieval failed')
+    })
+
+    it('should throw error if reserve_pool_membership fails (capacity exceeded)', async () => {
+      mockSingle.mockResolvedValueOnce({
+        data: { listing: { price_per_unit: 50 }, id: 'pool-123' },
+        error: null
+      })
+
+      mockSupabase.rpc.mockResolvedValue({ error: { code: '45000' } })
+
+      await expect(PactService.joinPool('pool-123', 'user-123', 5, 'test@test.com'))
+        .rejects.toThrow('Pool capacity exceeded')
+    })
+
+    it('should throw error if reserve_pool_membership fails (invalid quantity)', async () => {
+      mockSingle.mockResolvedValueOnce({
+        data: { listing: { price_per_unit: 50 }, id: 'pool-123' },
+        error: null
+      })
+
+      mockSupabase.rpc.mockResolvedValue({ error: { code: '22023' } })
+
+      await expect(PactService.joinPool('pool-123', 'user-123', 5, 'test@test.com'))
+        .rejects.toThrow('Invalid quantity')
+    })
+
+    it('should throw error if reserve_pool_membership fails (generic error)', async () => {
+      mockSingle.mockResolvedValueOnce({
+        data: { listing: { price_per_unit: 50 }, id: 'pool-123' },
+        error: null
+      })
+
+      mockSupabase.rpc.mockResolvedValue({ error: { message: 'Some other error' } })
+
+      await expect(PactService.joinPool('pool-123', 'user-123', 5, 'test@test.com'))
+        .rejects.toThrow('Some other error')
+    })
+
+    it('should throw default error if reserve_pool_membership fails without message', async () => {
+      mockSingle.mockResolvedValueOnce({
+        data: { listing: { price_per_unit: 50 }, id: 'pool-123' },
+        error: null
+      })
+
+      mockSupabase.rpc.mockResolvedValue({ error: {} })
+
+      await expect(PactService.joinPool('pool-123', 'user-123', 5, 'test@test.com'))
+        .rejects.toThrow('Failed to reserve pool spot')
+    })
+  })
+
+  describe('getPoolDetails', () => {
+    it('should get pool details successfully', async () => {
+      const mockPoolDetails = { id: 'pool-123', status: 'active' }
+      mockSingle.mockResolvedValueOnce({ data: mockPoolDetails, error: null })
+
+      const result = await PactService.getPoolDetails('pool-123')
+
+      expect(mockSupabase.from).toHaveBeenCalledWith('pools')
+      expect(mockSelect).toHaveBeenCalledWith(expect.stringContaining('listing:listings'))
+      expect(mockEq).toHaveBeenCalledWith('id', 'pool-123')
+      expect(result).toEqual(mockPoolDetails)
+    })
+
+    it('should throw error if getting pool details fails', async () => {
+      // Mock single for failure
+      mockSingle.mockResolvedValueOnce({ data: null, error: new Error('Failed to fetch pool') })
+
+      await expect(PactService.getPoolDetails('pool-123'))
+        .rejects.toThrow('Failed to fetch pool')
+    })
+  })
+
+  describe('searchPools', () => {
+    it('should search pools successfully without filters', async () => {
+      const mockPools = [{ id: 'pool-1' }, { id: 'pool-2' }]
+
+      // We return the query chain correctly
+      mockEq.mockResolvedValueOnce({ data: mockPools, error: null })
+
+      const result = await PactService.searchPools({})
+
+      expect(mockSupabase.from).toHaveBeenCalledWith('pools')
+      expect(mockEq).toHaveBeenCalledWith('status', 'active')
+      expect(result).toEqual(mockPools)
+    })
+
+    it('should search pools successfully with category filter', async () => {
+      const mockPools = [{ id: 'pool-1' }]
+
+      // mock the second .eq call for category
+      mockEq.mockReturnValueOnce({
+        eq: jest.fn().mockResolvedValueOnce({ data: mockPools, error: null })
+      })
+
+      const result = await PactService.searchPools({ category: 'Food' })
+
+      expect(result).toEqual(mockPools)
+    })
+
+    it('should search pools successfully with limit filter', async () => {
+      const mockPools = [{ id: 'pool-1' }, { id: 'pool-2' }]
+
+      mockEq.mockReturnValueOnce({
+        limit: jest.fn().mockResolvedValueOnce({ data: mockPools, error: null })
+      })
+
+      const result = await PactService.searchPools({ limit: 2 })
+
+      expect(result).toEqual(mockPools)
+    })
+
+    it('should throw error if search fails', async () => {
+      mockEq.mockResolvedValueOnce({ data: null, error: new Error('Search failed') })
+
+      await expect(PactService.searchPools({}))
+        .rejects.toThrow('Search failed')
+    })
+  })
+
+  describe('getPoolChatMessages', () => {
+    it('should get pool chat messages successfully', async () => {
+      const mockMessages = [{ id: 'msg-1', message: 'Hello' }]
+      // .order returns a promise resolving to {data, error}
+      mockOrder.mockResolvedValueOnce({ data: mockMessages, error: null })
+
+      const result = await PactService.getPoolChatMessages('pool-123')
+
+      expect(mockSupabase.from).toHaveBeenCalledWith('pool_chat')
+      expect(mockEq).toHaveBeenCalledWith('pool_id', 'pool-123')
+      expect(mockOrder).toHaveBeenCalledWith('created_at', { ascending: true })
+      expect(result).toEqual(mockMessages)
+    })
+
+    it('should throw error if getting pool chat messages fails', async () => {
+      mockOrder.mockResolvedValueOnce({ data: null, error: new Error('Chat fetch failed') })
+
+      await expect(PactService.getPoolChatMessages('pool-123'))
+        .rejects.toThrow('Chat fetch failed')
+    })
+  })
+
+  describe('sendChatMessage', () => {
+    it('should send chat message successfully', async () => {
+      const mockMessage = { id: 'msg-1', message: 'Hello' }
+      mockSingle.mockResolvedValueOnce({ data: mockMessage, error: null })
+
+      const result = await PactService.sendChatMessage('pool-123', 'user-123', 'Hello')
+
+      expect(mockSupabase.from).toHaveBeenCalledWith('pool_chat')
+      expect(mockInsert).toHaveBeenCalledWith({
+        pool_id: 'pool-123',
+        user_id: 'user-123',
+        message: 'Hello',
+      })
+      expect(result).toEqual(mockMessage)
+    })
+
+    it('should throw error if sending chat message fails', async () => {
+      mockSingle.mockResolvedValueOnce({ data: null, error: new Error('Send failed') })
+
+      await expect(PactService.sendChatMessage('pool-123', 'user-123', 'Hello'))
+        .rejects.toThrow('Send failed')
     })
   })
 })
