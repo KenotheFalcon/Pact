@@ -1,11 +1,14 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle, ArrowLeft, CheckCircle2 } from "lucide-react"
-import { forgotPassword } from "../actions"
+import Link from "next/link"
+
 import { MotionWrapper } from "@/components/MotionWrapper"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { SubmitButton } from "@/components/ui/submit-button"
+
+import { forgotPassword } from "../actions"
+
 
 export default function ForgotPasswordPage({
   searchParams,
@@ -55,9 +58,12 @@ export default function ForgotPasswordPage({
                   className="bg-background/50 border-input focus:ring-pact-green focus:border-pact-green transition-all h-12 rounded-xl"
                 />
               </div>
-              <Button type="submit" className="w-full bg-pact-green hover:bg-pact-green/90 text-white shadow-lg shadow-pact-green/20 transition-all hover:scale-[1.02] h-12 rounded-xl text-base font-semibold">
+              <SubmitButton
+                loadingText="Sending..."
+                className="w-full bg-pact-green hover:bg-pact-green/90 text-white shadow-lg shadow-pact-green/20 transition-all hover:scale-[1.02] h-12 rounded-xl text-base font-semibold"
+              >
                 Send Reset Link
-              </Button>
+              </SubmitButton>
             </form>
           </CardContent>
           <CardFooter className="flex justify-center pb-8 pt-2">
