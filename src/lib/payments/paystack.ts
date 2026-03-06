@@ -34,7 +34,6 @@ declare global {
 
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY!;
 const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!;
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 interface PaystackCaptureResponse {
   status: boolean;
@@ -116,7 +115,7 @@ export async function verifyPayment(
  */
 export function generatePaymentReference(prefix: string = "PACT"): string {
   const timestamp = Date.now();
-  const random = Math.random().toString(36).substring(2, 9).toUpperCase();
+  const random = crypto.randomUUID().split("-")[0].toUpperCase();
   return `${prefix}-${timestamp}-${random}`;
 }
 
