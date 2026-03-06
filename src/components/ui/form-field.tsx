@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { SuccessCheck } from '@/components/ui/success-check'
-import { useFieldValidation } from '@/hooks/useFieldValidation'
+import { useFieldValidation, type ValidationRule } from '@/hooks/useFieldValidation'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 interface FormFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -64,11 +64,29 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
     const currentValue = value !== undefined ? String(value) : internalValue
 
     // Validation hook (only if schema provided)
-    const validationSchema = schema ?? z.string()
-    const validation = useFieldValidation(currentValue, {
-      schema: validationSchema,
-      debounceMs,
-      validateOnBlur
+    const rules: ValidationRule<string>[] = React.useMemo(() => {
+      if (!schema) return [];
+      let lastError = 'Invalid value';
+      return [
+        {
+          validate: (val: string) => {
+            const result = schema.safeParse(val);
+            if (!result.success) {
+              lastError = result.error.errors[0]?.message || 'Invalid value';
+              return false;
+            }
+            return true;
+          },
+          get message() {
+            return lastError;
+          }
+        }
+      ];
+    }, [schema]);
+
+    const validation = useFieldValidation(currentValue, rules, {
+      delayMs: debounceMs,
+      validateOnChange: !validateOnBlur
     })
 
     // Notify parent of validation changes

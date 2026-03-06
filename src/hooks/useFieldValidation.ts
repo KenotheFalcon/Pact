@@ -1,18 +1,13 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import type { ZodType, ZodError } from 'zod'
 
-interface UseFieldValidationOptions<T> {
-  /** Zod schema to validate against */
-  schema: ZodType<T>
-  /** Debounce delay in milliseconds (default: 300) */
-  debounceMs?: number
-  /** Only start validating after first blur (default: false) */
-  validateOnBlur?: boolean
+export interface ValidationRule<T> {
+  validate: (value: T) => boolean;
+  message: string;
 }
 
-interface UseFieldValidationResult {
+export interface UseFieldValidationResult {
   /** Whether the current value is valid */
   isValid: boolean
   /** Error message if invalid, null otherwise */
@@ -28,17 +23,18 @@ interface UseFieldValidationResult {
 }
 
 /**
- * Hook for real-time debounced Zod validation
+ * Hook for real-time debounced rule-based validation
  * 
  * @example
- * const emailSchema = z.string().email('Invalid email address')
- * const { isValid, error, isValidating } = useFieldValidation(email, { schema: emailSchema })
+ * const rules = [{ validate: (v) => v.length > 0, message: "Required" }]
+ * const { isValid, error, isValidating } = useFieldValidation(email, rules)
  */
 export function useFieldValidation<T>(
   value: T,
-  options: UseFieldValidationOptions<T>
+  rules: ValidationRule<T>[],
+  options: { validateOnChange?: boolean; delayMs?: number } = {}
 ): UseFieldValidationResult {
-  const { schema, debounceMs = 300, validateOnBlur = false } = options
+  const { validateOnChange = true, delayMs = 300 } = options
 
   const [isValid, setIsValid] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -56,12 +52,10 @@ export function useFieldValidation<T>(
     }
   }, [value])
 
-  // Touch handler for blur events
   const touch = useCallback(() => {
     setIsTouched(true)
   }, [])
 
-  // Reset handler
   const reset = useCallback(() => {
     setIsValid(false)
     setError(null)
@@ -71,52 +65,52 @@ export function useFieldValidation<T>(
     initialValueRef.current = value
   }, [value])
 
-  // Debounced validation
   useEffect(() => {
-    // Don't validate if using blur mode and not yet touched
-    if (validateOnBlur && !isTouched) {
+    if (!validateOnChange && !isTouched) {
       return
     }
 
-    // Don't show errors if value hasn't changed yet
     if (!hasChangedRef.current && !isTouched) {
       return
     }
 
-    // Clear existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
     }
 
-    // Mark as validating
     setIsValidating(true)
 
-    // Debounce validation
     timeoutRef.current = setTimeout(() => {
       try {
-        schema.parse(value)
-        setIsValid(true)
-        setError(null)
-      } catch (err) {
-        setIsValid(false)
-        if (err && typeof err === 'object' && 'errors' in err) {
-          const zodError = err as ZodError
-          setError(zodError.errors[0]?.message ?? 'Invalid value')
-        } else {
-          setError('Invalid value')
+        let firstError: string | null = null;
+        for (const rule of rules) {
+          if (!rule.validate(value)) {
+            firstError = rule.message;
+            break;
+          }
         }
+
+        if (firstError) {
+          setIsValid(false)
+          setError(firstError)
+        } else {
+          setIsValid(true)
+          setError(null)
+        }
+      } catch (err) {
+         setIsValid(false)
+         setError("Validation error")
       } finally {
         setIsValidating(false)
       }
-    }, debounceMs)
+    }, delayMs)
 
-    // Cleanup on unmount or value change
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
       }
     }
-  }, [value, schema, debounceMs, validateOnBlur, isTouched])
+  }, [value, rules, delayMs, validateOnChange, isTouched])
 
   return {
     isValid,
