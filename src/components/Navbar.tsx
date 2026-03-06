@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Menu, X, Leaf, User as UserIcon, ShoppingCart, ChevronRight, HelpCircle, LogOut, FileQuestion } from 'lucide-react'
 import type { User, AuthChangeEvent, Session } from '@supabase/supabase-js'
 import { Button } from '@/components/ui/button'
