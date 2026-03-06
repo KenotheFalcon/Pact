@@ -1,22 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowLeft, ArrowRight, Save, Upload, DollarSign, Package, Calendar, CheckCircle2, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
+
 import { createListingAction } from '@/app/farmer/listings/create/actions'
-import { ListingFormData } from '@/types/farmer'
 import ImageUpload from '@/components/farmer/ImageUpload'
 import LocationPicker from '@/components/farmer/LocationPicker'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { ArrowLeft, ArrowRight, Save, Upload, MapPin, DollarSign, Package, Calendar, CheckCircle2, ChevronRight } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
-import { toast } from 'sonner'
+import { ListingFormData } from '@/types/farmer'
+
 
 const CATEGORIES = [
   'Fruits', 'Vegetables', 'Grains', 'Dairy', 'Meat', 'Poultry', 'Seafood',
