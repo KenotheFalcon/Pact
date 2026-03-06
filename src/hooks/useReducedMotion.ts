@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
  * Respects system accessibility preferences
  */
 export function useReducedMotion(): boolean {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(true)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   useEffect(() => {
     // Guard for SSR - only run on client
