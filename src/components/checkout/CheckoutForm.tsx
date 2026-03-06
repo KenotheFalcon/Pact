@@ -1,17 +1,18 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { createBrowserClient } from '@supabase/ssr'
+import { CreditCard, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import Script from 'next/script'
-import { createBrowserClient } from '@supabase/ssr'
+import { useState, useMemo } from 'react'
+import { toast } from "sonner"
+
+import { verifyPaymentAndCreateOrder } from '@/app/checkout/actions'
 import { CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { LoadingButton } from "@/components/ui/loading-button"
-import { toast } from "sonner"
-import { verifyPaymentAndCreateOrder } from '@/app/checkout/actions'
 
-import { CreditCard, AlertCircle, CheckCircle2 } from 'lucide-react'
 
 interface Pool {
     id: string
@@ -120,7 +121,7 @@ export function CheckoutForm({ pool, poolId }: CheckoutFormProps) {
                 email: user.email,
                 amount: amount * 100, // Paystack expects amount in kobo
                 currency: 'NGN',
-                ref: '' + Math.floor((Math.random() * 1000000000) + 1),
+                ref: crypto.randomUUID(),
                 callback: async function (response: { reference: string }) {
                     // 3. Verify on Server
                     toast.info("Verifying payment…")
