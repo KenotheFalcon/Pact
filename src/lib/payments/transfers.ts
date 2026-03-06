@@ -87,7 +87,9 @@ export async function resolveBankAccount(
 }
 
 export function generateTransferReference(prefix = "PAYOUT"): string {
-  const rand = Math.random().toString(36).slice(2, 8).toUpperCase();
+  const array = new Uint8Array(4);
+  globalThis.crypto.getRandomValues(array);
+  const rand = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase();
   const ts = Date.now().toString(36).toUpperCase();
   return `${prefix}_${ts}_${rand}`;
 }
