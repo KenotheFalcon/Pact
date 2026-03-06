@@ -3,9 +3,8 @@
  * Handles Paystack dispute/chargeback management
  */
 
-import type { SupabaseClient } from '@supabase/supabase-js'
-
 import type { Database } from '@/types/supabase'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 export type ChargebackStatus = 
   | 'open'
@@ -156,6 +155,38 @@ export class ChargebackService {
     return {
       data: (data as Chargeback[]) || [],
       count: count || 0,
+    }
+  }
+
+  /**
+   * Resolve a dispute
+   */
+  async resolveDispute(
+    disputeId: string,
+    resolution: 'won' | 'lost',
+    notes?: string
+  ): Promise<{ success: boolean; data?: Chargeback; error?: string }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('chargebacks')
+        .update({
+          status: resolution === 'won' ? 'resolved_won' : 'resolved_lost',
+          outcome: resolution,
+          admin_notes: notes,
+          resolved_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', disputeId)
+        .select()
+        .single()
+
+      if (error) {
+        return { success: false, error: error.message }
+      }
+
+      return { success: true, data: data as Chargeback }
+    } catch {
+      return { success: false, error: 'Failed to resolve dispute' }
     }
   }
 
