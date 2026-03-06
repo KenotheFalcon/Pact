@@ -7,11 +7,14 @@ import { useEffect, useState } from 'react'
  * Respects system accessibility preferences
  */
 export function useReducedMotion(): boolean {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(true)
+  // We initialize as false to match standard client-side defaults and issue description
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   useEffect(() => {
     // Guard for SSR - only run on client
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined' || typeof window.matchMedia === 'undefined') {
+      return
+    }
     
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     setPrefersReducedMotion(mediaQuery.matches)
