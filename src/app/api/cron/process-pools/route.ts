@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { apiSuccess, apiUnauthorized, apiError, apiInternalError } from "@/lib/api/responses";
+import { safeCompare } from "@/lib/auth/timing-safe";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const CRON_SECRET = process.env.CRON_SECRET!;
@@ -19,7 +20,13 @@ export async function GET(request: NextRequest) {
     const authHeader = request.headers.get("authorization");
     const cronSecret = request.nextUrl.searchParams.get("secret");
 
-    if (authHeader !== `Bearer ${CRON_SECRET}` && cronSecret !== CRON_SECRET) {
+    const expectedAuthHeader = `Bearer ${CRON_SECRET}`;
+
+    // Use timing-safe comparison to prevent timing attacks
+    const isAuthHeaderValid = safeCompare(authHeader, expectedAuthHeader);
+    const isCronSecretValid = safeCompare(cronSecret, CRON_SECRET);
+
+    if (!isAuthHeaderValid && !isCronSecretValid) {
       return apiUnauthorized("Invalid cron secret");
     }
 
