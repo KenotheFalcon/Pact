@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { checkPasswordStrength, getStrengthColorClass, getStrengthTextColorClass, type PasswordStrengthResult } from '@/lib/password-validation';
 import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
+
 import { Input } from '@/components/ui/input';
+import { checkPasswordStrength, getStrengthColorClass, getStrengthTextColorClass, type PasswordStrengthResult } from '@/lib/password-validation';
 
 interface PasswordInputWithStrengthProps {
   id?: string;
@@ -80,11 +81,13 @@ export function PasswordInputWithStrength({
           onClick={() => setShowPassword(!showPassword)}
           className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
           tabIndex={-1}
+          aria-label={showPassword ? "Hide password" : "Show password"}
+          aria-pressed={showPassword}
         >
           {showPassword ? (
-            <EyeOff className="h-4 w-4" />
+            <EyeOff className="h-4 w-4" aria-hidden="true" />
           ) : (
-            <Eye className="h-4 w-4" />
+            <Eye className="h-4 w-4" aria-hidden="true" />
           )}
         </button>
       </div>
