@@ -17,22 +17,22 @@ export default function LoginPage({
   return (
     <div className="flex min-h-screen w-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8 relative overflow-hidden bg-background">
       {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none bg-background">
-        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-pact-green/20 dark:bg-pact-green/10 blur-[120px] animate-pulse" />
-        <div className="absolute top-[40%] -right-[10%] w-[40%] h-[40%] rounded-full bg-emerald-500/10 dark:bg-emerald-500/5 blur-[120px]" />
+      <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none bg-pact-gray dark:bg-pact-dark">
+        <div className="absolute top-[-15%] right-[-5%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-pact-green/10 to-emerald-300/10 blur-[100px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-gradient-to-tr from-emerald-500/10 to-transparent blur-[120px]" />
       </div>
 
       <MotionWrapper className="w-full max-w-md relative z-10">
-        <Card className="border-border bg-card backdrop-blur-xl shadow-2xl shadow-black/5 dark:shadow-black/50">
-          <CardHeader className="space-y-1 text-center pb-8">
-            <CardTitle className="font-heading text-3xl font-bold tracking-tight text-foreground">
+        <Card className="border-none bg-background/80 backdrop-blur-2xl shadow-float dark:bg-card/80 p-2">
+          <CardHeader className="space-y-2 text-center pb-8 pt-6">
+            <CardTitle className="font-heading text-4xl font-extrabold tracking-tight text-foreground">
               Welcome back
             </CardTitle>
-            <CardDescription className="text-muted-foreground text-base">
+            <CardDescription className="text-muted-foreground/80 text-base font-medium">
               Enter your email to sign in to your account
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 px-6">
             {searchParams.error && (
               <Alert 
                 variant="destructive" 
@@ -45,22 +45,22 @@ export default function LoginPage({
               </Alert>
             )}
             <form action={login} className="space-y-5" aria-describedby={searchParams.error ? "login-error" : undefined}>
-              <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium leading-none text-foreground ml-1">Email</label>
+              <div className="space-y-2.5">
+                <label htmlFor="email" className="text-sm font-semibold text-foreground ml-1">Email</label>
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="name@example.com"
                   required
                   autoComplete="email"
-                  className="bg-background/50 border-input focus:ring-pact-green focus:border-pact-green h-12 rounded-xl"
+                  className="bg-white/50 dark:bg-black/50"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="text-sm font-medium leading-none text-foreground ml-1">Password</label>
-                  <Link href="/forgot-password" className="text-xs text-pact-green hover:underline font-medium">
+                  <label htmlFor="password" className="text-sm font-semibold text-foreground ml-1">Password</label>
+                  <Link href="/forgot-password" className="text-sm text-pact-green hover:text-pact-green/80 hover:underline font-semibold transition-colors">
                     Forgot password?
                   </Link>
                 </div>
@@ -69,26 +69,26 @@ export default function LoginPage({
                   name="password"
                   required
                   autoComplete="current-password"
-                  className="bg-background/50 border-input focus:ring-pact-green focus:border-pact-green h-12 rounded-xl"
+                  className="bg-white/50 dark:bg-black/50"
                 />
               </div>
-              <Button type="submit" className="w-full bg-pact-green hover:bg-pact-green/90 text-white shadow-lg shadow-pact-green/20 h-12 rounded-xl text-base font-semibold">
-                Sign In <ArrowRight className="ml-2 h-4 w-4" />
+              <Button type="submit" className="w-full h-12 text-base shadow-glow hover:shadow-glow-lg mt-2">
+                Sign In <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </form>
 
             <div className="relative my-8">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-border" />
+                <span className="w-full border-t border-border/50" />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background/50 px-2 text-muted-foreground backdrop-blur-sm rounded-full">Or continue with</span>
+              <div className="relative flex justify-center text-xs uppercase font-medium">
+                <span className="bg-background/80 px-3 py-1 text-muted-foreground backdrop-blur-md rounded-full border border-border/30">Or continue with</span>
               </div>
             </div>
 
             <GoogleSignInButton />
           </CardContent>
-          <CardFooter className="flex justify-center pb-8 pt-2">
+          <CardFooter className="flex justify-center pb-8 pt-4">
             <p className="text-sm text-muted-foreground">
               Don&apos;t have an account?{" "}
               <Link href="/signup" className="text-pact-green hover:underline font-semibold">

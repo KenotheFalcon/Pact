@@ -120,15 +120,16 @@ module.exports = {
         xl: "20px",
         "2xl": "24px",
         "3xl": "32px",
+        "full": "9999px",
       },
       boxShadow: {
-        'subtle': '0 1px 2px 0 rgb(0 0 0 / 0.03)',
-        'card': '0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06)',
-        'elevated': '0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05)',
-        'float': '0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.05)',
-        'glow': '0 0 20px -5px rgb(46 125 50 / 0.35)',
-        'glow-lg': '0 0 40px -10px rgb(46 125 50 / 0.4)',
-        'inner-glow': 'inset 0 1px 0 0 rgb(255 255 255 / 0.05)',
+        'subtle': '0 2px 10px rgba(0, 0, 0, 0.02)',
+        'card': '0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)',
+        'elevated': '0 10px 30px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.03)',
+        'float': '0 20px 40px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.04)',
+        'glow': '0 0 25px -5px rgb(46 125 50 / 0.25)',
+        'glow-lg': '0 0 50px -10px rgb(46 125 50 / 0.3)',
+        'inner-glow': 'inset 0 2px 4px 0 rgb(255 255 255 / 0.1)',
       },
       keyframes: {
         "accordion-down": {

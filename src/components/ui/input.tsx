@@ -20,11 +20,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         name={name}
         spellCheck={shouldDisableSpellcheck ? false : undefined}
         className={cn(
-          "flex h-11 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm ring-offset-background",
+          "flex h-12 w-full rounded-2xl border border-input/50 bg-background px-5 py-3 text-sm ring-offset-background shadow-subtle",
           "placeholder:text-muted-foreground/60",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pact-green/20 focus-visible:border-pact-green",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pact-green/30 focus-visible:border-pact-green focus-visible:shadow-glow",
           "disabled:cursor-not-allowed disabled:opacity-50",
-          "transition-colors duration-150",
+          "transition-all duration-300 hover:shadow-card hover:border-input",
           className
         )}
         ref={ref}
