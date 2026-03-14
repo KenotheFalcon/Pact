@@ -1,18 +1,17 @@
 'use client';
 
+import { Search, MapPin, Filter } from 'lucide-react';
 import { useState, useTransition } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { Badge } from '@/components/ui/badge';
-import { Search, MapPin, Filter, X, Check, ChevronDown, ChevronUp } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
 import type { ListingFilters } from '@/types/database';
 
 interface ListingFiltersProps {
@@ -208,7 +207,7 @@ export function ListingFilters({ onFilterChange, userLocation }: ListingFiltersP
                         <Label className="text-xs font-bold uppercase tracking-wider text-zinc-500">Sort By</Label>
                         <Select value={sortBy ?? undefined} onValueChange={(v) => setSortBy(v as ListingFilters['sortBy'])}>
                             <SelectTrigger className="h-10 border-zinc-200 dark:border-zinc-800 rounded-lg">
-                                <SelectValue />
+                                <SelectValue placeholder="Select sort order..." />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="created_at">Newest First</SelectItem>
