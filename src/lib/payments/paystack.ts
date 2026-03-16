@@ -116,7 +116,16 @@ export async function verifyPayment(
  */
 export function generatePaymentReference(prefix: string = "PACT"): string {
   const timestamp = Date.now();
-  const random = Math.random().toString(36).substring(2, 9).toUpperCase();
+
+  // Generate 4 random bytes (32 bits) for 8 hex characters
+  const array = new Uint8Array(4);
+  globalThis.crypto.getRandomValues(array);
+
+  const random = Array.from(array)
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+    .toUpperCase();
+
   return `${prefix}-${timestamp}-${random}`;
 }
 
