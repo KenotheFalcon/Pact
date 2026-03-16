@@ -33,10 +33,6 @@ export type {
   Json,
 }
 
-// Legacy re-export for backwards compatibility
-/** @deprecated Use PoolStatus instead. GroupBuy terminology has been replaced with Pool. */
-export type GroupBuyStatus = PoolStatus
-
 export interface ContactSubmission {
   id: string
   user_id?: string
