@@ -1,0 +1,3 @@
+## 2026-03-18 - Password visibility toggle accessibility
+**Learning:** Icon-only buttons with `tabIndex={-1}` are fundamentally inaccessible to keyboard-only users. Password visibility toggles specifically need `aria-pressed` states, full keyboard focus (no `tabIndex={-1}`), appropriate ARIA labels or Tooltips (providing a `<span className="sr-only">`), and `aria-hidden="true"` on internal SVGs to correctly indicate their purpose and state.
+**Action:** When implementing interactive icon toggles, always wrap them in Tooltips for sighted users and ensure keyboard navigability (with a robust `focus-visible` ring) alongside necessary ARIA attributes for screen readers.
