@@ -1,0 +1,3 @@
+## 2024-03-20 - Accessible Password Visibility Toggles
+**Learning:** Icon-only password visibility toggles frequently lack keyboard accessibility (due to tabIndex={-1} or missing focus styles) and fail to communicate their state to screen readers (missing aria-pressed/aria-label). Sighted users also benefit from tooltips on icon-only buttons.
+**Action:** Remove tabIndex={-1}, add focus-visible utility classes, ensure aria-label and aria-pressed are present on the button, add aria-hidden="true" to the inner SVG icons, and wrap the button in a Tooltip.
