@@ -1,0 +1,3 @@
+## 2026-03-21 - Tooltips for Icon-Only Buttons
+**Learning:** Icon-only action buttons (like password visibility toggles) that rely solely on `aria-label` for screen readers leave sighted users without a clear understanding of the button's purpose, especially if the icon is ambiguous. Furthermore, setting `tabIndex={-1}` on these buttons completely breaks keyboard navigation.
+**Action:** When creating or modifying icon-only action buttons, always ensure they are keyboard accessible by removing `tabIndex={-1}` and adding explicit focus styles (e.g., `focus-visible:ring-2`). Wrap the button in a Radix UI Tooltip to provide a visual label on hover/focus for sighted users, complementing the `aria-label` meant for screen readers.
