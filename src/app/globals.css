@@ -147,16 +147,16 @@
 
 /* Button styles */
 .btn-primary {
-  @apply bg-pact-green hover:bg-pact-green/90 text-white font-medium py-2.5 px-5 rounded-xl transition-colors duration-150;
+  @apply bg-pact-green hover:bg-pact-green/90 text-white font-medium py-2.5 px-5 rounded-full transition-all duration-300 shadow-elevated hover:shadow-float active:scale-[0.98];
 }
 
 .btn-secondary {
-  @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium py-2.5 px-5 rounded-xl transition-colors duration-150;
+  @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium py-2.5 px-5 rounded-full transition-all duration-300 shadow-subtle hover:shadow-card active:scale-[0.98];
 }
 
 /* Input styles */
 .input-field {
-  @apply w-full px-4 py-2.5 border border-input rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-pact-green/20 focus:border-pact-green transition-colors duration-150;
+  @apply w-full px-5 py-3 border border-input rounded-2xl bg-background focus:outline-none focus:ring-2 focus:ring-pact-green/30 focus:border-pact-green transition-all duration-300 shadow-subtle hover:shadow-card;
 }
 
 /* Reduced motion accessibility - CSS fallback */

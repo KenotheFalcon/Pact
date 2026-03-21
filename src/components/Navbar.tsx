@@ -104,33 +104,33 @@ export function Navbar() {
                 role="navigation"
                 transition={prefersReducedMotion ? undefined : { duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 className={cn(
-                    "fixed left-0 right-0 top-0 z-50 py-3 md:py-4 transition-all duration-500 ease-in-out",
+                    "fixed left-0 right-0 top-0 z-50 py-4 transition-all duration-500 ease-in-out",
                     showSolid
-                        ? "bg-background/90 backdrop-blur-xl border-b border-border/60 shadow-sm"
+                        ? "bg-transparent"
                         : "bg-transparent"
                 )}
             >
-                <div className="container relative mx-auto px-4">
+                <div className="container relative mx-auto px-4 max-w-6xl">
                     <div
                         className={cn(
-                            "relative flex h-12 items-center justify-between rounded-full px-3 transition-colors duration-500 md:h-14 md:px-4",
+                            "relative flex h-14 items-center justify-between rounded-full px-4 transition-all duration-500 md:h-16 md:px-6",
                             showSolid
-                                ? "bg-card/90 border border-border/70 shadow-sm backdrop-blur-xl"
-                                : "bg-white/5 border border-white/10 backdrop-blur-2xl"
+                                ? "bg-background/80 border border-border/40 shadow-float backdrop-blur-2xl"
+                                : "bg-white/10 border border-white/20 backdrop-blur-3xl shadow-lg"
                         )}
                     >
                         {/* Logo */}
-                        <Link href="/" className="flex items-center space-x-2 group relative z-50 flex-shrink-0">
-                            <div className="relative">
+                        <Link href="/" className="flex items-center space-x-2.5 group relative z-50 flex-shrink-0 transition-transform duration-200 active:scale-95">
+                            <div className="relative flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-300 shadow-sm bg-pact-green/10 group-hover:bg-pact-green/20">
                                 <div className="absolute inset-0 bg-pact-green/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                 <Leaf className={cn(
-                                    "w-8 h-8 transition-colors duration-300 relative",
+                                    "w-5 h-5 transition-colors duration-300 relative",
                                     showSolid ? "text-pact-green" : "text-white drop-shadow-md"
                                 )} aria-hidden="true" />
                             </div>
                             <span className={cn(
-                                "text-xl font-bold tracking-tight transition-colors duration-300",
-                                showSolid ? "text-zinc-900 dark:text-white" : "text-white drop-shadow-md"
+                                "text-xl font-extrabold tracking-tight transition-colors duration-300 font-heading",
+                                showSolid ? "text-foreground" : "text-white drop-shadow-md"
                             )}>
                                 Pact
                             </span>

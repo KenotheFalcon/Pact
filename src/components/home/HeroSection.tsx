@@ -45,32 +45,32 @@ export function HeroSection() {
         <motion.div
           {...revealProps}
           variants={slideUpVariants}
-          className="flex flex-col items-center gap-6"
+          className="flex flex-col items-center gap-8"
         >
-          <Badge variant="success" className="border-white/15 bg-white/10 px-4 py-1.5 text-white backdrop-blur">
-            Revolutionizing Agriculture in Africa
+          <Badge variant="success" className="border-white/15 bg-white/10 px-5 py-2 text-sm font-medium text-white backdrop-blur-md rounded-full shadow-glow">
+            ✨ Revolutionizing Agriculture in Africa
           </Badge>
 
-          <h1 className="font-heading text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="font-heading text-5xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl drop-shadow-lg">
             Fresh-er Food{' '}
-            <span className="bg-gradient-to-r from-pact-green to-emerald-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-br from-emerald-300 via-pact-green to-emerald-500 bg-clip-text text-transparent drop-shadow-none">
               Fair-er Prices
             </span>
           </h1>
 
-          <p className="max-w-2xl text-lg text-zinc-200 md:text-xl">
+          <p className="max-w-3xl text-lg text-zinc-200/90 md:text-xl lg:text-2xl leading-relaxed font-medium">
             Precision agriculture meets community buying power. Connect directly with farmers for fresh, locally-sourced produce at wholesale prices.
           </p>
 
-          <div className="flex flex-col items-center gap-4 pt-2 sm:flex-row">
+          <div className="flex flex-col items-center gap-4 pt-4 sm:flex-row">
             <Link href="/marketplace">
-              <Button size="xl" className="gap-2">
+              <Button size="xl" className="gap-2 shadow-glow hover:shadow-glow-lg text-lg px-10 h-16">
                 Browse Marketplace
                 <ArrowRight className="h-5 w-5" aria-hidden="true" />
               </Button>
             </Link>
             <Link href="/about">
-              <Button size="xl" variant="outline" className="border-white/20 bg-white/5 text-white backdrop-blur hover:bg-white/10">
+              <Button size="xl" variant="outline" className="border-white/30 bg-white/10 text-white backdrop-blur-md hover:bg-white/20 hover:border-white/50 text-lg px-10 h-16 transition-all duration-300">
                 How Pact Works
               </Button>
             </Link>
