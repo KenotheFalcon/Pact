@@ -1,11 +1,11 @@
 'use client'
 
-import * as React from "react"
 import { Eye, EyeOff } from "lucide-react"
+import * as React from "react"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { cn } from "@/lib/utils"
 
 export interface PasswordInputProps
     extends React.InputHTMLAttributes<HTMLInputElement> { }
