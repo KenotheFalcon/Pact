@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { checkPasswordStrength, getStrengthColorClass, getStrengthTextColorClass, type PasswordStrengthResult } from '@/lib/password-validation';
 import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
+
 import { Input } from '@/components/ui/input';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { checkPasswordStrength, getStrengthColorClass, getStrengthTextColorClass, type PasswordStrengthResult } from '@/lib/password-validation';
 
 interface PasswordInputWithStrengthProps {
   id?: string;
@@ -75,18 +77,28 @@ export function PasswordInputWithStrength({
           onChange={handleChange}
           onBlur={handleBlur}
         />
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-          tabIndex={-1}
-        >
-          {showPassword ? (
-            <EyeOff className="h-4 w-4" />
-          ) : (
-            <Eye className="h-4 w-4" />
-          )}
-        </button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pact-green focus-visible:ring-offset-2"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-pressed={showPassword}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" aria-hidden="true" />
+                ) : (
+                  <Eye className="h-4 w-4" aria-hidden="true" />
+                )}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{showPassword ? "Hide password" : "Show password"}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       {showStrengthIndicator && strength && value.length > 0 && (
