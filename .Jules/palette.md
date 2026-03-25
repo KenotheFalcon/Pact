@@ -1,0 +1,5 @@
+## 2024-03-24 - Init\n**Learning:** Palette init\n**Action:** Started journaling
+
+## 2024-03-24 - Accessible Icon-Only Password Toggles
+**Learning:** Icon-only toggle buttons (like password visibility toggles) that rely solely on `aria-label`s provide poor experiences for sighted users navigating via keyboard, and can cause confusion for screen reader users if multiple identical toggles exist or if `aria-pressed` state is missing. Reduced opacity focus rings (e.g. `focus-visible:ring-pact-green/20`) further hurt keyboard accessibility by reducing contrast. Wrapping icon-only actions in tooltips provides immediate clarity for sighted users while proper ARIA attributes (`aria-pressed`, `aria-hidden` on SVGs) ensure screen reader support.
+**Action:** When creating icon-only action toggles, wrap the button in a Radix UI `<Tooltip>`, include explicit `aria-label` and `aria-pressed` attributes, set `aria-hidden="true"` on the internal icon, and use high-contrast focus rings (`focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`).
