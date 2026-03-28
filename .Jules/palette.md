@@ -1,0 +1,3 @@
+## 2024-05-14 - Icon Buttons without Visible Labels
+**Learning:** Icon-only action buttons (such as password visibility toggles) that lack visual labels can present accessibility and UX challenges, especially when their function isn't perfectly clear. When a button also lacks keyboard focus states, it becomes unusable for screen readers or keyboard navigation.
+**Action:** For icon-only buttons, I should add `aria-label`s, remove `tabIndex={-1}` so they are part of the page's natural tab order, and add proper focus states like `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`. Finally, I should consider wrapping them in Radix UI `Tooltip` components so visual users have additional context on hover and focus.
