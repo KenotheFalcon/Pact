@@ -1,0 +1,4 @@
+## 2025-01-20 - Keyboard Accessibility of Inline Form Actions
+
+**Learning:** Using `tabIndex={-1}` on interactive inline form elements, like a password visibility toggle button inside a password input, completely breaks keyboard navigation for those users. While it might prevent "extra" tab stops for mouse users, it makes the action completely inaccessible to keyboard-only and screen reader users. Furthermore, missing `aria-label` and `aria-pressed` on these icon-only buttons means screen readers won't announce their purpose or state.
+**Action:** Never use `tabIndex={-1}` on interactive actions unless they are genuinely non-interactive for *all* users (which is rare). Always ensure icon-only buttons have accessible names (`aria-label`) and state indicators (`aria-pressed`). In addition to standard focus styles (`focus-visible:ring-2`), wrap icon-only actions in tooltips (`<Tooltip>`) to provide clarity for sighted users as well.
