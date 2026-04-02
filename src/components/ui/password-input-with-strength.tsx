@@ -1,21 +1,28 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { checkPasswordStrength, getStrengthColorClass, getStrengthTextColorClass, type PasswordStrengthResult } from '@/lib/password-validation';
-import { Eye, EyeOff } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react'
+
+import { Input } from '@/components/ui/input'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import {
+  checkPasswordStrength,
+  getStrengthColorClass,
+  getStrengthTextColorClass,
+  type PasswordStrengthResult,
+} from '@/lib/password-validation'
 
 interface PasswordInputWithStrengthProps {
-  id?: string;
-  name?: string;
-  placeholder?: string;
-  required?: boolean;
-  className?: string;
-  showStrengthIndicator?: boolean;
-  autoComplete?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onStrengthChange?: (strength: PasswordStrengthResult | null) => void;
+  id?: string
+  name?: string
+  placeholder?: string
+  required?: boolean
+  className?: string
+  showStrengthIndicator?: boolean
+  autoComplete?: string
+  value?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onStrengthChange?: (strength: PasswordStrengthResult | null) => void
 }
 
 export function PasswordInputWithStrength({
@@ -30,35 +37,35 @@ export function PasswordInputWithStrength({
   onChange: controlledOnChange,
   onStrengthChange,
 }: PasswordInputWithStrengthProps) {
-  const [showPassword, setShowPassword] = useState(false);
-  const [internalValue, setInternalValue] = useState('');
-  const [strength, setStrength] = useState<PasswordStrengthResult | null>(null);
-  const [touched, setTouched] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
+  const [internalValue, setInternalValue] = useState('')
+  const [strength, setStrength] = useState<PasswordStrengthResult | null>(null)
+  const [touched, setTouched] = useState(false)
 
-  const value = controlledValue !== undefined ? controlledValue : internalValue;
+  const value = controlledValue !== undefined ? controlledValue : internalValue
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    
+    const newValue = e.target.value
+
     if (controlledOnChange) {
-      controlledOnChange(e);
+      controlledOnChange(e)
     } else {
-      setInternalValue(newValue);
+      setInternalValue(newValue)
     }
 
     if (newValue.length > 0) {
-      const newStrength = checkPasswordStrength(newValue);
-      setStrength(newStrength);
-      onStrengthChange?.(newStrength);
+      const newStrength = checkPasswordStrength(newValue)
+      setStrength(newStrength)
+      onStrengthChange?.(newStrength)
     } else {
-      setStrength(null);
-      onStrengthChange?.(null);
+      setStrength(null)
+      onStrengthChange?.(null)
     }
-  };
+  }
 
   const handleBlur = () => {
-    setTouched(true);
-  };
+    setTouched(true)
+  }
 
   return (
     <div className="space-y-2">
@@ -75,18 +82,29 @@ export function PasswordInputWithStrength({
           onChange={handleChange}
           onBlur={handleBlur}
         />
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-          tabIndex={-1}
-        >
-          {showPassword ? (
-            <EyeOff className="h-4 w-4" />
-          ) : (
-            <Eye className="h-4 w-4" />
-          )}
-        </button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-pressed={showPassword}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" aria-hidden="true" />
+                ) : (
+                  <Eye className="h-4 w-4" aria-hidden="true" />
+                )}
+                <span className="sr-only">{showPassword ? 'Hide password' : 'Show password'}</span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{showPassword ? 'Hide password' : 'Show password'}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       {showStrengthIndicator && strength && value.length > 0 && (
@@ -99,7 +117,9 @@ export function PasswordInputWithStrength({
                 style={{ width: `${strength.score}%` }}
               />
             </div>
-            <span className={`text-sm font-medium capitalize ${getStrengthTextColorClass(strength.color)}`}>
+            <span
+              className={`text-sm font-medium capitalize ${getStrengthTextColorClass(strength.color)}`}
+            >
               {strength.label}
             </span>
           </div>
@@ -118,5 +138,5 @@ export function PasswordInputWithStrength({
         </div>
       )}
     </div>
-  );
+  )
 }
