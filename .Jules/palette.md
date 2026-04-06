@@ -1,0 +1,3 @@
+## 2024-05-18 - Avoid tabIndex={-1} on interactive toggles
+**Learning:** Keyboard accessibility is broken if interactive elements like password visibility toggle buttons use `tabIndex={-1}`, which blocks focus. Sighted users also benefit from tooltips on icon-only buttons to clarify intent.
+**Action:** Always ensure interactive elements (like `button`) use standard focus ring styles (e.g., `focus-visible:ring-2`) and remove any negative tab indexes that prevent keyboard navigation. Add `Tooltip` components around icon-only action buttons.
