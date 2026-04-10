@@ -1,0 +1,4 @@
+
+## 2024-06-25 - Improve Password Input Visibility Toggle
+**Learning:** Icon-only action buttons (like password visibility toggles) are often confusing to sighted users who don't rely on screen readers. While `aria-label` provides context for screen readers, adding a Tooltip is critical for sighted users to understand the button's action. Additionally, it's a common anti-pattern to use `tabIndex={-1}` to hide these buttons from keyboard navigation. They must be navigable via keyboard with distinct focus styles (using standard Tailwind focus-visible classes) for complete accessibility.
+**Action:** When implementing or fixing icon-only buttons, always ensure they have: 1) Tooltips for sighted users, 2) `aria-label`s for screen readers, 3) Keyboard navigation capability (no `tabIndex={-1}`), and 4) Clear visual focus states using `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`.
