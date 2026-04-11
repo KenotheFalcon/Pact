@@ -1,0 +1,3 @@
+## 2026-04-11 - Password Toggle Accessibility Pattern
+**Learning:** Password visibility toggle buttons often use `tabIndex={-1}` which prevents keyboard users from operating them. They also frequently lack proper ARIA labels and focus indicators, making them inaccessible to screen readers and keyboard navigation.
+**Action:** Always ensure interactive elements within form controls, like password toggles, are keyboard-focusable, have clear `aria-label` attributes indicating their current state (e.g., 'Show password'/'Hide password'), `aria-pressed` to indicate toggle state, `aria-hidden='true'` on decorative icons, and visible focus styles (e.g., `focus-visible:ring-2`).
