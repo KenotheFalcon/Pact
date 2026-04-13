@@ -1,0 +1,3 @@
+## 2024-04-13 - Password Visibility & Strength Meter Accessibility
+**Learning:** State toggles positioned over inputs (e.g., password visibility) are often skipped by keyboard users due to `tabIndex={-1}` and lack proper `focus-visible` styling or ARIA states. Furthermore, dynamic strength indicators require proper roles (`role="meter"`) and live regions (`aria-live="polite"`) to announce their updates to screen readers.
+**Action:** When creating inline input controls and dynamic visual indicators, always ensure they are fully keyboard accessible (remove negative tabIndex, add explicit focus-visible classes), include explicit `aria-label` and `aria-pressed` attributes, and utilize appropriate ARIA roles and live regions for dynamic states.
