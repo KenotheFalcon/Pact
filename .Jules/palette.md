@@ -1,0 +1,4 @@
+
+## 2024-06-25 - Interactive Toggles and Dynamic Visual Indicators Keyboard A11y
+**Learning:** Components that use visual icons to represent state toggles (like a password visibility eye icon) often lack keyboard accessibility if given `tabIndex={-1}` and no `aria-label`/`aria-pressed` states. Furthermore, dynamic visual indicators like a password strength meter need appropriate ARIA roles (`role="meter"`) and live region announcements (`aria-live="polite"`) to convey visual-only information to screen readers.
+**Action:** When creating or reviewing interactive toggles, ensure they are keyboard-focusable, have clear focus styles (`focus-visible:outline-none focus-visible:ring-2`), and communicate their state to screen readers via `aria-pressed`. Hide purely decorative icons from assistive tech with `aria-hidden="true"`. Apply `role="meter"` and `aria-live` to dynamic visual indicators.
