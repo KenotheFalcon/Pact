@@ -1,0 +1,3 @@
+## 2024-05-16 - Password Input Accessibility
+**Learning:** Using `tabIndex={-1}` on interactive elements like password visibility toggles completely blocks keyboard navigation. Additionally, visual-only strength indicators fail to communicate to screen readers without specific roles and live regions.
+**Action:** Always ensure interactive toggles have focus styles and omit `tabIndex={-1}`. For strength meters, apply `role="meter"` with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` attributes, and ensure textual readouts use `aria-live="polite"` so screen readers announce changes smoothly.
