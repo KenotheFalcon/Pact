@@ -1,0 +1,3 @@
+## 2024-05-18 - Password Input Accessibility
+**Learning:** Decorative icons in custom interactive elements like a password visibility toggle must be explicitly hidden (`aria-hidden="true"`), and interactive toggles need clear `aria-label` and `aria-pressed` states. Furthermore, dynamically updating visual indicators like a password strength meter require both appropriate roles (`role="meter"`, `aria-valuenow`) and screen-reader announcements (`aria-live="polite"`) to be fully accessible.
+**Action:** Always verify `aria-hidden` on decorative SVG icons within buttons, add `aria-pressed` for toggles, and use `aria-live` for dynamic textual readouts alongside their progress/meter equivalents.
