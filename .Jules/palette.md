@@ -1,0 +1,3 @@
+## 2024-04-20 - Fix keyboard accessibility on password strength input
+**Learning:** Using `tabIndex={-1}` on state toggle buttons (like password visibility eyes) inside inputs blocks keyboard navigation, making the app inaccessible to keyboard and screen reader users. Furthermore, dynamic visual indicators like password strength bars need `role="meter"` and text readouts need `aria-live="polite"` so screen readers can convey the dynamic state changes.
+**Action:** Never use `tabIndex={-1}` on interactive elements unless specifically managing complex focus scopes. Always provide explicit `aria-label`, `aria-pressed` for toggle buttons, and use `role="meter"` for dynamic visual bars like strength indicators, coupled with `aria-live="polite"` for text descriptions.
