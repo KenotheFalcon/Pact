@@ -1,0 +1,3 @@
+## 2024-06-18 - Password Strength Indicator Accessibility
+**Learning:** Dynamic, non-interactive visual indicators like password strength meters require specific ARIA roles (`role="meter"`) and live regions (`aria-live="polite"`) to be conveyed to screen readers, whereas decorative icons within toggle buttons require `aria-hidden="true"` to reduce noise. Removing `tabIndex={-1}` is also critical for keyboard navigation to reach the toggle.
+**Action:** Always map visual-only state changes (like strength bars) to semantic ARIA roles and use polite live regions for textual strength labels. Ensure interactive elements inside inputs have standard `focus-visible` styling.
