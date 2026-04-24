@@ -1,0 +1,3 @@
+## 2024-04-24 - Password Strength Meter Accessibility
+**Learning:** Visibility toggles in password inputs were using `tabIndex={-1}`, completely breaking keyboard accessibility. Dynamic password strength indicators were lacking semantic roles and live regions, leaving screen reader users unaware of their password's strength score and issues.
+**Action:** Removed `tabIndex={-1}` and applied `focus-visible` styles with `aria-label`/`aria-pressed` for visibility toggles. Used `role="meter"` with `aria-valuenow/min/max` for strength bars, and `aria-live="polite"` to wrap the indicator container so textual updates are naturally announced to assistive technologies.
