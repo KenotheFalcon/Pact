@@ -1,0 +1,3 @@
+## 2026-04-26 - Interactive Element Accessibility
+**Learning:** For interactive elements like toggle buttons within inputs (e.g. password visibility), using `tabIndex={-1}` blocks keyboard navigation. Decorative icons must be hidden from screen readers using `aria-hidden='true'` to avoid clutter, while state toggles require `aria-pressed` to convey status. Dynamic visual indicators (like password strength meters) must use `role="meter"` with `aria-valuenow/min/max` and `aria-live="polite"` to ensure text readouts are announced to screen readers.
+**Action:** Always provide explicit ARIA roles/labels and focus styles for custom interactive elements, and verify keyboard navigation logic for components like password strength meters.
