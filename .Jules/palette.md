@@ -1,0 +1,3 @@
+## 2024-05-01 - Avoid tabIndex={-1} on Interactive Toggles & Dynamic Readouts
+**Learning:** In interactive input toggles like `PasswordInputWithStrength`, using `tabIndex={-1}` on buttons prevents keyboard-only users from accessing the control. Additionally, dynamic visual indicators like password strength meters need explicit semantics (`role="meter"`) and live regions (`aria-live="polite"`) to be conveyed to screen readers.
+**Action:** Always verify interactive toggles (like "Show Password") omit `tabIndex={-1}` and include proper `focus-visible` styles, `aria-label`, and `aria-pressed`. For dynamic visual feedback elements like progress or strength bars, add `role="meter"` with corresponding `aria-value*` attributes, and use `aria-live` for textual changes.
