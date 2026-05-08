@@ -1,0 +1,4 @@
+
+## 2024-05-08 - Password Input Accessibility Improvements
+**Learning:** Toggle buttons within input wrappers (like password visibility toggles) that use `tabIndex={-1}` create a keyboard trap or prevent keyboard users from accessing functionality altogether. Furthermore, strength indicators often lack semantics and use simple `div` widths for visual feedback, excluding screen readers.
+**Action:** When implementing input accessory buttons, always ensure they are fully focusable (remove `tabIndex={-1}`), have visible focus rings (`focus-visible:ring`), and have correct `aria-label`/`aria-pressed` attributes. For dynamic visual meters like password strength, use `role="meter"` with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` on the wrapper, and provide textual readouts with `aria-live="polite"` so screen readers can announce changes as the user types.
