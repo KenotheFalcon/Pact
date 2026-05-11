@@ -1,0 +1,3 @@
+## 2025-05-11 - Password Input Accessibility
+**Learning:** The toggle buttons for password visibility initially used `tabIndex={-1}`, which hid them from keyboard navigation entirely. Additionally, custom progress bars (like a password strength meter) require `role="meter"` and ARIA values (`aria-valuenow`, `aria-valuemin`, `aria-valuemax`), and wrapping them in an `aria-live="polite"` container ensures screen reader users receive dynamic feedback on strength.
+**Action:** Always verify keyboard accessibility of utility buttons (no `tabIndex={-1}`) and ensure that progress bars implement standard ARIA meter attributes and live regions so their visual information is programmatically exposed.
