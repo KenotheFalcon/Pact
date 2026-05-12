@@ -1,0 +1,3 @@
+## 2024-05-12 - Password Strength Accessibility
+**Learning:** Adding screen reader properties (`role="meter"`, `aria-valuenow`, etc.) to visual indicator bars (like password strength) and using `aria-live` on the text label is essential for non-visual users to understand real-time changes to the input state. Tab stops should be removed on toggles if they use `tabIndex={-1}`, but if removed, ensure proper `focus-visible` ring styling is explicitly applied so keyboard navigators have visual feedback.
+**Action:** When creating visual state indicators, always consider their screen reader equivalent and ensure focus rings are visible on interactive icon buttons.
