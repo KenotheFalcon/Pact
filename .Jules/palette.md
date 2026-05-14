@@ -1,0 +1,3 @@
+## 2024-05-14 - Accessible Password Toggle and Strength Meter
+**Learning:** Using `tabIndex={-1}` on password visibility toggles breaks keyboard navigation. Password strength indicators built with divs are invisible to screen readers unless assigned the `meter` role.
+**Action:** Always ensure interactive elements are keyboard accessible (remove `tabIndex={-1}`, add `focus-visible` styles). Use `aria-pressed`, `aria-label`, and `aria-hidden` on toggle buttons and their icons. Use `role="meter"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax` on visual progress bars, and `aria-live="polite"` on text readouts for dynamic state changes.
