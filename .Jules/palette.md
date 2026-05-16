@@ -1,0 +1,3 @@
+## 2024-05-16 - Password Input Strength Accessibility
+**Learning:** Strength indicators often use purely visual bars without screen reader equivalents. Adding `role="meter"` with `aria-valuenow/min/max` and tying the textual strength label with `aria-live="polite"` ensures users get real-time feedback as they type without forcing focus changes. Additionally, icon buttons embedded in inputs need clear focus indicators (`focus-visible`) and must not have `tabIndex={-1}` if they are the only way to trigger a state.
+**Action:** Always check custom visual indicators (like strength meters, progress bars, or inline validations) for screen reader counterparts using `aria-live` and appropriate ARIA roles.
