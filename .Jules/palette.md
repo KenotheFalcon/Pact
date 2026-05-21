@@ -1,0 +1,3 @@
+## 2024-05-21 - Accessible Dynamic Inputs
+**Learning:** When using custom dynamic visual elements like a password strength meter, generic implementations often miss vital ARIA properties, which leaves screen reader users blind to real-time feedback.
+**Action:** Always apply `role="meter"` along with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` to the visual bar itself, and wrap text-based dynamic feedback (like "weak" or "strong") in a container with `aria-live="polite"` so state changes are announced as the user types.
