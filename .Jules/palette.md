@@ -1,0 +1,3 @@
+## 2025-05-23 - Accessibility of Password Strength Indicators
+**Learning:** For compound input components like `PasswordInputWithStrength`, ensure optional IDs (e.g. `id?: string`) have a stable fallback (using `useId()`). Without this fallback, dynamically generated ARIA attributes like `aria-controls={id}` or `id={`${id}-strength-text`}` will incorrectly resolve to strings like `"undefined"` and `"undefined-strength-text"`, degrading the screen reader experience.
+**Action:** Always verify that IDs used in ARIA references are guaranteed to exist, applying `useId()` when the consumer omits the `id` prop.
