@@ -253,6 +253,7 @@ export default function CartPage() {
                             onClick={() => removeFromCart(item.id)}
                             disabled={isProcessing}
                             className="text-muted-foreground hover:text-red-600"
+                            aria-label="Remove item from cart"
                           >
                             {isProcessing ? (
                               <Loader2 className="h-4 w-4 animate-spin" />
