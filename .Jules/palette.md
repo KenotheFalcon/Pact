@@ -1,0 +1,3 @@
+## 2024-05-24 - Password Strength Meter Accessibility & Toggle
+**Learning:** In compound input components like `PasswordInputWithStrength`, using `tabIndex={-1}` on password visibility toggles breaks essential keyboard navigation. Additionally, visual password strength indicators are completely invisible to screen readers unless marked with `role="meter"`, `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, and a text readout with `aria-live="polite"`.
+**Action:** When implementing password inputs or visual strength meters, always use standard focus visible styles instead of `tabIndex={-1}`, and explicitly set meter ARIA roles/values with an `aria-live` region for the strength label to ensure screen readers announce updates.
