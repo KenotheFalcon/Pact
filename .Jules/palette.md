@@ -1,0 +1,3 @@
+## 2024-05-19 - Password Toggle Accessibility
+**Learning:** Found a specific component `PasswordInputWithStrength` that was manually preventing keyboard navigation to its toggle button using `tabIndex={-1}`, hiding it from users relying on keyboard access. Unlike the generic `PasswordInput` which handled it better, this component completely failed accessibility for its primary interactive element.
+**Action:** Always verify keyboard focus capability on custom interactive elements, especially those toggling states inside form inputs. Do not rely on `tabIndex={-1}` for buttons unless they are truly decorative or explicitly managed by an overarching widget controller.
