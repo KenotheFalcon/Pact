@@ -1,0 +1,3 @@
+## 2025-05-29 - Password Strength Meter Accessibility
+**Learning:** Decorative progress bars for password strength are completely invisible to screen readers without specific ARIA attributes. Also, `tabIndex={-1}` is often mistakenly used on internal component buttons (like password visibility toggles) to skip them during normal form flow, which severely degrades keyboard accessibility.
+**Action:** When encountering or building visual meters (strength, completion, capacity), always add `role="meter"`, `aria-valuenow`, `aria-valuemin`, and `aria-valuemax`. Ensure text descriptions of the meter state have `aria-live="polite"`. Never use `tabIndex={-1}` on interactive elements; instead, provide standard `focus-visible` states and ensure they are reachable via Tab.
