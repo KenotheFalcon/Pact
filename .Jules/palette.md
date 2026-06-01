@@ -1,0 +1,3 @@
+## 2025-06-01 - Keyboard Accessibility in Custom Components
+**Learning:** Found that custom `PasswordInputWithStrength` component explicitly blocked keyboard navigation by setting `tabIndex={-1}` on its toggle button, rendering it inaccessible to keyboard users. It also lacked `aria-pressed`, `aria-label`, and a proper ARIA setup for its dynamically updated visual strength meter.
+**Action:** Ensure custom interactive elements never use `tabIndex={-1}` unless specifically managing complex focus traps. Always provide `focus-visible` styles, state attributes (`aria-pressed`), and use `role="meter"` alongside `aria-live="polite"` for dynamic visual indicators to guarantee a robust screen reader experience.
