@@ -1,19 +1,28 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { PasswordInput } from "@/components/ui/password-input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+'use client'
+
 import { AlertCircle, ArrowRight } from "lucide-react"
-import { login } from "../actions"
+import Link from "next/link"
+import { useTransition } from "react"
+
 import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton"
 import { MotionWrapper } from "@/components/MotionWrapper"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { LoadingButton } from "@/components/ui/loading-button"
+import { PasswordInput } from "@/components/ui/password-input"
+
+import { login } from "../actions"
+
+
 
 export default function LoginPage({
   searchParams,
 }: {
   searchParams: { error?: string }
 }) {
+  const [isPending, startTransition] = useTransition()
+
   return (
     <div className="flex min-h-screen w-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8 relative overflow-hidden bg-background">
       {/* Background Elements */}
@@ -44,7 +53,11 @@ export default function LoginPage({
                 <AlertDescription>{searchParams.error}</AlertDescription>
               </Alert>
             )}
-            <form action={login} className="space-y-5" aria-describedby={searchParams.error ? "login-error" : undefined}>
+            <form
+              action={(formData) => startTransition(() => login(formData))}
+              className="space-y-5"
+              aria-describedby={searchParams.error ? "login-error" : undefined}
+            >
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium leading-none text-foreground ml-1">Email</label>
                 <Input
@@ -72,9 +85,14 @@ export default function LoginPage({
                   className="bg-background/50 border-input focus:ring-pact-green focus:border-pact-green h-12 rounded-xl"
                 />
               </div>
-              <Button type="submit" className="w-full bg-pact-green hover:bg-pact-green/90 text-white shadow-lg shadow-pact-green/20 h-12 rounded-xl text-base font-semibold">
+              <LoadingButton
+                type="submit"
+                loading={isPending}
+                loadingText="Signing In..."
+                className="w-full bg-pact-green hover:bg-pact-green/90 text-white shadow-lg shadow-pact-green/20 h-12 rounded-xl text-base font-semibold"
+              >
                 Sign In <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+              </LoadingButton>
             </form>
 
             <div className="relative my-8">

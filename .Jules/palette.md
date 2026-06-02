@@ -1,0 +1,3 @@
+## 2024-05-30 - Form Submit Loading States with Next.js Server Actions
+**Learning:** When adding `LoadingButton` to handle loading states for forms powered by Next.js Server Actions, standard uncontrolled HTML forms do not track `loading` state by default. We must transition the component to a Client Component (`'use client'`) and use `useTransition` (or `useFormStatus` inside a child component) to intercept the action and accurately display the loading spinner.
+**Action:** Always check if a form using Server Actions is in a server or client component before adding interactive loading states, and use `useTransition` when handling form actions in client components.
