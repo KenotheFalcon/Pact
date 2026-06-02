@@ -1,17 +1,26 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+'use client'
+
 import { AlertCircle, ArrowLeft, CheckCircle2 } from "lucide-react"
-import { forgotPassword } from "../actions"
+import Link from "next/link"
+import { useTransition } from "react"
+
 import { MotionWrapper } from "@/components/MotionWrapper"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { LoadingButton } from "@/components/ui/loading-button"
+
+import { forgotPassword } from "../actions"
+
+
 
 export default function ForgotPasswordPage({
   searchParams,
 }: {
   searchParams: { error?: string; success?: string }
 }) {
+  const [isPending, startTransition] = useTransition()
+
   return (
     <div className="flex min-h-screen w-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8 relative overflow-hidden bg-background">
       {/* Background Elements */}
@@ -43,7 +52,7 @@ export default function ForgotPasswordPage({
                 <AlertDescription>{searchParams.success}</AlertDescription>
               </Alert>
             )}
-            <form action={forgotPassword} className="space-y-5">
+            <form action={(formData) => startTransition(() => forgotPassword(formData))} className="space-y-5">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium leading-none text-foreground ml-1">Email</label>
                 <Input
@@ -55,9 +64,14 @@ export default function ForgotPasswordPage({
                   className="bg-background/50 border-input focus:ring-pact-green focus:border-pact-green transition-all h-12 rounded-xl"
                 />
               </div>
-              <Button type="submit" className="w-full bg-pact-green hover:bg-pact-green/90 text-white shadow-lg shadow-pact-green/20 transition-all hover:scale-[1.02] h-12 rounded-xl text-base font-semibold">
+              <LoadingButton
+                type="submit"
+                loading={isPending}
+                loadingText="Sending Link..."
+                className="w-full bg-pact-green hover:bg-pact-green/90 text-white shadow-lg shadow-pact-green/20 transition-all hover:scale-[1.02] h-12 rounded-xl text-base font-semibold"
+              >
                 Send Reset Link
-              </Button>
+              </LoadingButton>
             </form>
           </CardContent>
           <CardFooter className="flex justify-center pb-8 pt-2">

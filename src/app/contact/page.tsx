@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { motion } from 'framer-motion'
 import { Send, CheckCircle2 } from 'lucide-react'
+import { useState } from 'react'
+
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { LoadingButton } from '@/components/ui/loading-button'
+import { Textarea } from '@/components/ui/textarea'
 
 export default function ContactPage() {
     const [submitted, setSubmitted] = useState(false)
@@ -124,19 +126,16 @@ export default function ContactPage() {
                                         />
                                     </div>
 
-                                    <Button
+                                    <LoadingButton
                                         type="submit"
+                                        loading={isLoading}
+                                        loadingText="Sending..."
                                         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                                        disabled={isLoading}
                                     >
-                                        {isLoading ? (
-                                            <span className="animate-pulse">Sending...</span>
-                                        ) : (
-                                            <span className="flex items-center gap-2">
-                                                Send Message <Send className="h-4 w-4" />
-                                            </span>
-                                        )}
-                                    </Button>
+                                        <span className="flex items-center gap-2">
+                                            Send Message <Send className="h-4 w-4" />
+                                        </span>
+                                    </LoadingButton>
                                 </form>
                             )}
                         </CardContent>
