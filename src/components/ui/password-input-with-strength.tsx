@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { checkPasswordStrength, getStrengthColorClass, getStrengthTextColorClass, type PasswordStrengthResult } from '@/lib/password-validation';
 import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
+
 import { Input } from '@/components/ui/input';
+import { checkPasswordStrength, getStrengthColorClass, getStrengthTextColorClass, type PasswordStrengthResult } from '@/lib/password-validation';
 
 interface PasswordInputWithStrengthProps {
   id?: string;
@@ -39,7 +40,7 @@ export function PasswordInputWithStrength({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    
+
     if (controlledOnChange) {
       controlledOnChange(e);
     } else {
@@ -78,13 +79,14 @@ export function PasswordInputWithStrength({
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-          tabIndex={-1}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+          aria-label={showPassword ? "Hide password" : "Show password"}
+          aria-pressed={showPassword}
         >
           {showPassword ? (
-            <EyeOff className="h-4 w-4" />
+            <EyeOff className="h-4 w-4" aria-hidden="true" />
           ) : (
-            <Eye className="h-4 w-4" />
+            <Eye className="h-4 w-4" aria-hidden="true" />
           )}
         </button>
       </div>
@@ -93,23 +95,33 @@ export function PasswordInputWithStrength({
         <div className="space-y-2">
           {/* Strength bar */}
           <div className="flex items-center gap-2">
-            <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div
+              className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"
+              role="meter"
+              aria-label="Password strength"
+              aria-valuenow={strength.score}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
               <div
                 className={`h-full transition-all duration-300 ${getStrengthColorClass(strength.color)}`}
                 style={{ width: `${strength.score}%` }}
               />
             </div>
-            <span className={`text-sm font-medium capitalize ${getStrengthTextColorClass(strength.color)}`}>
+            <span
+              className={`text-sm font-medium capitalize ${getStrengthTextColorClass(strength.color)}`}
+              aria-live="polite"
+            >
               {strength.label}
             </span>
           </div>
 
           {/* Issues list - only show if touched and there are issues */}
           {touched && strength.issues.length > 0 && strength.label !== 'strong' && (
-            <div className="text-xs space-y-1">
+            <div className="text-xs space-y-1" aria-live="polite">
               {strength.issues.map((issue, index) => (
                 <div key={index} className="flex items-start gap-1.5 text-muted-foreground">
-                  <span className="text-amber-500 mt-0.5">•</span>
+                  <span className="text-amber-500 mt-0.5" aria-hidden="true">•</span>
                   <span>{issue}</span>
                 </div>
               ))}

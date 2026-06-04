@@ -1,0 +1,3 @@
+## 2024-05-18 - Interactive UI Components and Accessibility
+**Learning:** For interactive UI elements (like a password visibility toggle) inside forms, removing `tabIndex={-1}` is essential for keyboard navigation. Additionally, visual meters (like password strength bars) require `role="meter"` and explicit ARIA attributes (`aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-live="polite"`) to be conveyed properly to screen readers.
+**Action:** When implementing custom interactive inputs or strength indicators, ensure toggles are focusable and use the `meter` role with `aria-live` for dynamic changes.
