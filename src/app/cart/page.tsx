@@ -1,13 +1,5 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import Image from 'next/image'
-import { createClient } from '@/lib/supabase/client'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { AnimatedListItem, AnimatedPageContent, AnimatePresence } from '@/components/AnimatedList'
 import { 
   ShoppingCart, 
   Trash2, 
@@ -17,7 +9,17 @@ import {
   Loader2,
   Package
 } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState, useEffect, useCallback } from 'react'
 import { toast } from 'sonner'
+
+import { AnimatedListItem, AnimatedPageContent, AnimatePresence } from '@/components/AnimatedList'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { createClient } from '@/lib/supabase/client'
+
 
 interface CartItem {
   id: string
@@ -253,6 +255,7 @@ export default function CartPage() {
                             onClick={() => removeFromCart(item.id)}
                             disabled={isProcessing}
                             className="text-muted-foreground hover:text-red-600"
+                            aria-label={`Remove ${listing?.title || 'item'} from cart`}
                           >
                             {isProcessing ? (
                               <Loader2 className="h-4 w-4 animate-spin" />
