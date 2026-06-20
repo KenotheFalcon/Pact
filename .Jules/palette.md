@@ -1,0 +1,3 @@
+## 2024-06-20 - Password Strength Accessibility
+**Learning:** Dynamic visual indicators (like strength meters) need explicit `role="meter"` with `aria-valuenow/min/max` and `aria-live="polite"` for text so screen readers can announce changes as users type. Toggle buttons must not have `tabIndex={-1}` and need proper focus indicators, `aria-label`, and `aria-pressed` states.
+**Action:** Always ensure password input components with toggle buttons and strength bars use proper focus rings, remove `tabIndex={-1}`, add `aria-live` regions for dynamic text updates, and `role="meter"` for visual bars.
