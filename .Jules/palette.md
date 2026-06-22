@@ -1,0 +1,3 @@
+## 2024-03-24 - Accessibility of Show/Hide Password Toggles
+**Learning:** By default, password toggle buttons often inadvertently block keyboard access if developers use `tabIndex={-1}` to prevent them from interrupting form flow. Additionally, toggles that swap icons (like Eye/EyeOff) require an explicit `aria-label` because screen readers don't reliably infer meaning from purely decorative or dynamically swapped SVGs.
+**Action:** When creating form inputs with nested actions (like show/hide password), never use `tabIndex={-1}` on the action button. Always ensure the button has a robust `focus-visible` ring, an `aria-label` describing the action, an `aria-pressed` state if it acts as a toggle, and `aria-hidden="true"` on the enclosed icon SVGs.
