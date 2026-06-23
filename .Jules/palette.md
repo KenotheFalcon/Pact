@@ -1,0 +1,3 @@
+## 2024-05-18 - Password Strength Meter Accessibility
+**Learning:** When building visual representations of numerical or abstract values (like a password strength bar), applying `role="meter"` along with `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` creates a significantly improved screen reader experience over plain divs or nested spans. Similarly, explicitly using `aria-live="polite"` on text updates ensures users are informed of dynamic state changes as they type.
+**Action:** Always apply `role="meter"` and explicit `aria-value*` properties to custom progress or strength bars. For dynamic textual feedback accompanying the bar, wrap it in an `aria-live` region.
