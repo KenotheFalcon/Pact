@@ -1,17 +1,15 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Leaf, User as UserIcon, ShoppingCart, ChevronRight, HelpCircle, LogOut, FileQuestion } from 'lucide-react'
-import type { User, AuthChangeEvent, Session } from '@supabase/supabase-js'
-import { Button } from '@/components/ui/button'
-import { mobileMenuItemVariants } from '@/lib/animations'
-import { useReducedMotion } from '@/hooks/useReducedMotion'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
+
+
 import { ThemeToggle } from '@/components/ThemeToggle'
-import { cn } from '@/lib/utils'
-import { createClient } from '@/lib/supabase/client'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -20,8 +18,13 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
+import { useReducedMotion } from '@/hooks/useReducedMotion'
+import { mobileMenuItemVariants } from '@/lib/animations'
+import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
+
+import type { User, AuthChangeEvent, Session } from '@supabase/supabase-js'
 
 const navLinks = [
     { href: '/marketplace', label: 'Active Pools', icon: ShoppingCart },
@@ -192,7 +195,7 @@ export function Navbar() {
                             {user ? (
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                                        <Button variant="ghost" className="relative h-10 w-10 rounded-full" aria-label="User profile menu">
                                             <Avatar className="h-10 w-10 border border-zinc-200 dark:border-zinc-800">
                                                 <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || "User"} />
                                                 <AvatarFallback className="bg-pact-green/10 text-pact-green font-bold">

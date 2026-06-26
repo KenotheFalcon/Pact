@@ -1,10 +1,5 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard,
@@ -19,8 +14,14 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useState, useEffect, useCallback } from 'react'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 
 const navigation = [
   { name: 'Dashboard', href: '/farmer', icon: LayoutDashboard },
@@ -220,6 +221,7 @@ export default function FarmerSidebar({ isCollapsed = false, onToggle }: FarmerS
               "flex items-center w-full px-3 py-2 text-sm font-medium text-zinc-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all group",
               isCollapsed && !isMobile ? 'justify-center' : ''
             )}
+            aria-label="Logout"
           >
             <LogOut className="h-5 w-5 group-hover:rotate-12 transition-transform" />
             {!isCollapsed && !isMobile && <span className="ml-3">Logout</span>}
