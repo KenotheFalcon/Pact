@@ -1,0 +1,3 @@
+## 2024-05-18 - ARIA Labels vs Screen Reader Only Text for i18n
+**Learning:** While both `aria-label` and visually hidden `<span className="sr-only">` text provide accessible names for screen readers, `aria-label` attributes are often NOT translated by automated browser translation tools (like Google Translate), whereas text nodes inside `.sr-only` spans are. Therefore, replacing or overriding `.sr-only` text with an `aria-label` is an accessibility anti-pattern for internationalization.
+**Action:** When adding accessible names to icon-only buttons, prefer adding a `<span className="sr-only">Text</span>` over an `aria-label` if internationalization via browser translation is a priority, and do NOT add `aria-label` to elements that already have an `.sr-only` span.
