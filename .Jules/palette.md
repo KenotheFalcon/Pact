@@ -1,0 +1,3 @@
+## 2024-05-24 - Interactive Component Accessibility Pattern
+**Learning:** Common UI patterns like custom "show/hide password" toggles inside input fields often sacrifice accessibility by adding `tabIndex={-1}` to prevent disrupting the tab flow between inputs. However, this completely blocks keyboard-only users from accessing the toggle functionality.
+**Action:** When implementing interactive toggles adjacent to or inside form inputs, never use `tabIndex={-1}`. Always ensure they are focusable, have visible focus styles (`focus-visible:ring-2`), have dynamic `aria-label`s describing the *action* (e.g., "Hide password"), provide state via `aria-pressed`, and hide decorative SVGs with `aria-hidden="true"`.
