@@ -1,10 +1,5 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-import { createClient } from '@/lib/supabase/client'
-import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   LayoutDashboard,
@@ -19,8 +14,14 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useState, useEffect, useCallback } from 'react'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { createClient } from '@/lib/supabase/client'
+import { cn } from '@/lib/utils'
 
 const navigation = [
   { name: 'Dashboard', href: '/farmer', icon: LayoutDashboard },
@@ -162,7 +163,7 @@ export default function FarmerSidebar({ isCollapsed = false, onToggle }: FarmerS
               key={item.name}
               href={item.href}
               className={cn(
-                'group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 relative overflow-hidden',
+                'group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 relative',
                 isActive
                   ? 'text-pact-green bg-pact-green/5 dark:bg-pact-green/10'
                   : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50',
@@ -178,9 +179,9 @@ export default function FarmerSidebar({ isCollapsed = false, onToggle }: FarmerS
 
               <Icon className={cn("h-5 w-5 flex-shrink-0 transition-colors duration-200", isActive ? "text-pact-green" : "text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300")} />
 
-              {!isCollapsed && !isMobile && (
-                <span className="ml-3 truncate font-semibold tracking-tight">{item.name}</span>
-              )}
+              <span className={cn("ml-3 truncate font-semibold tracking-tight", isCollapsed && !isMobile ? "sr-only" : "")}>
+                {item.name}
+              </span>
 
               {/* Tooltip for collapsed state */}
               {isCollapsed && !isMobile && (
@@ -199,7 +200,7 @@ export default function FarmerSidebar({ isCollapsed = false, onToggle }: FarmerS
           <Link
             href="/farmer/notifications"
             className={cn(
-              "flex items-center px-3 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-white dark:hover:bg-zinc-800 rounded-xl transition-all",
+              "group relative flex items-center px-3 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-white dark:hover:bg-zinc-800 rounded-xl transition-all",
               isCollapsed && !isMobile ? 'justify-center' : ''
             )}
           >
@@ -211,18 +212,36 @@ export default function FarmerSidebar({ isCollapsed = false, onToggle }: FarmerS
                 </span>
               )}
             </div>
-            {!isCollapsed && !isMobile && <span className="ml-3">Notifications</span>}
+            <span className={cn("ml-3", isCollapsed && !isMobile ? "sr-only" : "")}>
+              Notifications
+            </span>
+
+            {/* Tooltip for collapsed state */}
+            {isCollapsed && !isMobile && (
+              <div className="absolute left-full ml-4 px-2 py-1 bg-zinc-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-lg transition-opacity duration-200">
+                Notifications
+              </div>
+            )}
           </Link>
 
           <button
             onClick={handleLogout}
             className={cn(
-              "flex items-center w-full px-3 py-2 text-sm font-medium text-zinc-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all group",
+              "group relative flex items-center w-full px-3 py-2 text-sm font-medium text-zinc-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all",
               isCollapsed && !isMobile ? 'justify-center' : ''
             )}
           >
             <LogOut className="h-5 w-5 group-hover:rotate-12 transition-transform" />
-            {!isCollapsed && !isMobile && <span className="ml-3">Logout</span>}
+            <span className={cn("ml-3", isCollapsed && !isMobile ? "sr-only" : "")}>
+              Logout
+            </span>
+
+            {/* Tooltip for collapsed state */}
+            {isCollapsed && !isMobile && (
+              <div className="absolute left-full ml-4 px-2 py-1 bg-zinc-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-50 shadow-lg transition-opacity duration-200">
+                Logout
+              </div>
+            )}
           </button>
         </div>
       </div>
