@@ -1,0 +1,3 @@
+## 2024-05-15 - Accessible Collapsed Sidebar Labels & Tooltip Clipping
+**Learning:** When sidebars collapse to icon-only mode, conditionally removing the text node `{!isCollapsed && <span>Text</span>}` destroys the accessible name for screen readers if an `aria-label` isn't present on the parent link. Additionally, `overflow-hidden` on sidebar links will clip custom absolute-positioned tooltips meant to display on hover when collapsed.
+**Action:** Use conditional `sr-only` classes on the text node instead of unmounting it to preserve accessibility. Ensure parent interactive elements do not use `overflow-hidden` if they contain tooltips that render outside their bounding box.
