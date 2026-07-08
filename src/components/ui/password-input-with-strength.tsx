@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { checkPasswordStrength, getStrengthColorClass, getStrengthTextColorClass, type PasswordStrengthResult } from '@/lib/password-validation';
 import { Eye, EyeOff } from 'lucide-react';
+import { useState } from 'react';
+
 import { Input } from '@/components/ui/input';
+import { checkPasswordStrength, getStrengthColorClass, getStrengthTextColorClass, type PasswordStrengthResult } from '@/lib/password-validation';
 
 interface PasswordInputWithStrengthProps {
   id?: string;
@@ -86,6 +87,9 @@ export function PasswordInputWithStrength({
           ) : (
             <Eye className="h-4 w-4" />
           )}
+          <span className="sr-only">
+            {showPassword ? 'Hide password' : 'Show password'}
+          </span>
         </button>
       </div>
 
